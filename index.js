@@ -1,26 +1,29 @@
-﻿var Q = require('q'),
-    exec = require('child_process').exec;
+﻿var Q,
+    npm,
+    pub = {};
 
-exports.install = function(packageName) {
+module.exports = function($inject){
+    Q = $inject.Q;
+    npm = $inject.npm;
+
+    return pub;
+};
+
+pub.install = function(packageName){
     var q = Q.defer();
-    exec('npm install -g ' + packageName, function(error, stdout) {
-        if (error) {
-            q.reject(error);
-        } else {
-            q.resolve();
-        }
+    npm.load(npm.config, function (err) {
+        npm.commands.install([packageName], function(data){
+            q.resolve(data);
+        });
     });
     return q.promise;
 };
 
-exports.search = function(packageName) {
+pub.search = function(packageName){
     var q = Q.defer();
-    exec('npm search ' + packageName, function(error, stdout) {
-        if (error) {
-            q.reject(error);
-        } else {
-            q.resolve(stdout);
-        }
+    npm.load(npm.config, function (err) {
+        npm.commands.search([packageName], function(data){
+            q.resolve(data);
+        });
     });
-    return q.promise;
 };

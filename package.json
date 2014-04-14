@@ -1,0 +1,34 @@
+{
+  "name": "heinzelmannchen-npm",
+  "version": "0.0.0",
+  "description": "Utilities for npm",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heinzelmannchen/heinzelmannchen-npm.git"
+  },
+  "author": "Christoph Hermann & Sebastian Sprenger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heinzelmannchen/heinzelmannchen-npm/issues"
+  },
+  "homepage": "https://github.com/heinzelmannchen/heinzelmannchen-npm",
+  "dependencies": {
+    "q": "~1.0.1"
+  },
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "underscore": "~1.6.0",
+    "chai-fuzzy": "~1.4.0",
+    "chai-as-promised": "~4.1.1",
+    "sinon": "~1.9.1",
+    "sinon-chai": "~2.5.0",
+    "mocha-jshint": "0.0.7",
+    "proxyquire": "~0.6.0",
+    "mocha": "~1.18.2",
+    "mocha-as-promised": "~2.0.0"
+  }
+}

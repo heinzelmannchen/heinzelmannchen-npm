@@ -1,46 +1,49 @@
-var NpmUtils = require('../index'),
+var npmUtils = require('../index'),
     proxyquire = require('proxyquire').noCallThru(),
     Q = require('q'),
     sinon = require('sinon'),
-    inject = {
-        Q: Q,
-        npm: {
-            load: function(config, fun) { fun(); },
-            commands: {}
-        }
+    npmMock = {
+        commands: {},
+        load: function(config, cb) { cb(); }
     };
 
 require('mocha-as-promised')();
 
 describe('NpmUtils', function() {
     it('should offer install, search ', function() {
-        new NpmUtils(inject).should.respondTo('install');
-        new NpmUtils(inject).should.respondTo('search');
+        npmUtils.should.respondTo('install');
+        npmUtils.should.respondTo('search');
     });
 
     describe('#install', function() {
-        var spy;
+        var installSpy, mocked;
         beforeEach(function() {
-            spy = sinon.spy();
+            installSpy = sinon.spy();
+            npmMock.commands.install = installSpy;
+            mocked = proxyquire('../index', {
+                npm: npmMock
+            });
         });
 
         it('should call npm install', function() {
-            inject.npm.commands.install = spy;
-            new NpmUtils(inject).install('heinzel-generator-pg');
-            spy.should.have.been.calledWith(['heinzel-generator-pg']);
+            mocked.install('heinzel-generator-pg');
+            return installSpy.should.have.been.calledWith(['heinzel-generator-pg']);
         });
     });
 
     describe('#search', function() {
-        var spy;
+        var searchSpy, mocked;
         beforeEach(function() {
-            spy = sinon.spy();
+            searchSpy = sinon.spy();
+            npmMock.commands.search = searchSpy;
+            mocked = proxyquire('../index', {
+                npm: npmMock
+            });
         });
 
         it('should call npm search', function() {
-            inject.npm.commands.search = spy;
-            new NpmUtils(inject).search('burnhub');
-            spy.should.have.been.calledWith(['burnhub']);
+            mocked.search('burnhub');
+            return searchSpy.should.have.been.calledWith(['burnhub']);
         });
     });
 });

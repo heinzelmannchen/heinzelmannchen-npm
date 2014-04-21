@@ -1,13 +1,8 @@
-﻿var Q,
-    npm,
-    pub = {};
+﻿var Q = require('q'),
+    npm = require('npm'),
+    pub = module.exports;
 
-module.exports = function($inject){
-    Q = $inject.Q;
-    npm = $inject.npm;
-
-    return pub;
-};
+//TODO: install error
 
 pub.install = function(packageName){
     var q = Q.defer();

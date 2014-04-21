@@ -1,4 +1,5 @@
 ﻿var Q = require('q'),
+    _ = require('underscore'),
     npm = require('npm'),
     pub = module.exports;
 
@@ -18,11 +19,19 @@ pub.install = function(packageName, options){
     return q.promise;
 };
 
-pub.search = function(packageName){
+pub.search = function(keywords) {
     var q = Q.defer();
-    npm.load(function (err) {
-        npm.commands.search([packageName], function(data){
-            q.resolve(data);
+    if (!_.isArray(keywords)) {
+        keywords = [keywords];
+    }
+
+    npm.load(function(err) {
+        npm.commands.search(keywords, true, true, function(error, data) {
+            if (error) {
+                q.reject(error);
+            } else {
+                q.resolve(data);
+            }
         });
     });
     return q.promise;

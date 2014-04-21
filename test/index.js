@@ -52,5 +52,9 @@ describe('NpmUtils', function() {
             mocked.search('burnhub');
             return searchSpy.should.have.been.calledWith(['burnhub']);
         });
+        it('should call npm search with keywords', function() {
+            mocked.search(['key', 'word']);
+            return searchSpy.should.have.been.calledWith(['key', 'word']);
+        });
     });
 });

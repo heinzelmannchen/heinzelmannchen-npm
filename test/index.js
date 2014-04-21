@@ -36,6 +36,11 @@ describe('NpmUtils', function() {
             mocked.install('heinzel-generator-pg', { global: true });
             return configSpy.should.have.been.calledWith('global', true);
         });
+
+        it('should call npm install with keywords', function() {
+            mocked.install(['key', 'word']);
+            return installSpy.should.have.been.calledWith(['key', 'word']);
+        });
     });
 
     describe('#search', function() {

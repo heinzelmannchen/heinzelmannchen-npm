@@ -3,17 +3,23 @@
     npm = require('npm'),
     pub = module.exports;
 
-pub.install = function(packageName, options){
+pub.install = function(keywords, options){
     var q = Q.defer();
-
+    if (!_.isArray(keywords)) {
+        keywords = [keywords];
+    }
     options = options || {};
     
     npm.load(function (err) {
         if (options.global){
             npm.config.set('global', true);
         }
-        npm.commands.install([packageName], function(data){
-            q.resolve(data);
+        npm.commands.install(keywords, function(error, data){
+            if (error) {
+                q.reject(error);
+            } else {
+                q.resolve(data);
+            }
         });
     });
     return q.promise;

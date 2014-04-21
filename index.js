@@ -17,7 +17,7 @@ pub.install = function(packageName){
 pub.search = function(packageName){
     var q = Q.defer();
     npm.load(npm.config, function (err) {
-        npm.commands.search([packageName], function(data){
+        npm.commands.search([packageName], true, true, function(nully, data){
             q.resolve(data);
         });
     });

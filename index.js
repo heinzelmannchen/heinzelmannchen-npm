@@ -25,6 +25,28 @@ pub.install = function(keywords, options){
     return q.promise;
 };
 
+pub.uninstall = function(keywords, options){
+    var q = Q.defer();
+    if (!_.isArray(keywords)) {
+        keywords = [keywords];
+    }
+    options = options || {};
+    
+    npm.load(function (err) {
+        if (options.global){
+            npm.config.set('global', true);
+        }
+        npm.commands.uninstall(keywords, function(error, data){
+            if (error) {
+                q.reject(error);
+            } else {
+                q.resolve(data);
+            }
+        });
+    });
+    return q.promise;
+};
+
 pub.search = function(keywords) {
     var q = Q.defer();
     if (!_.isArray(keywords)) {

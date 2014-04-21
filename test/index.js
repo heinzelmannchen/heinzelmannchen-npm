@@ -43,6 +43,34 @@ describe('NpmUtils', function() {
         });
     });
 
+    describe('#uninstall', function() {
+        var mocked, uninstallSpy, configSpy;
+        beforeEach(function() {
+            uninstallSpy = sinon.spy();
+            configSpy = sinon.spy();
+            npmMock.commands.uninstall = uninstallSpy;
+            npmMock.config =  { set: configSpy };
+            mocked = proxyquire('../index', {
+                npm: npmMock
+            });
+        });
+
+        it('should call npm uninstall', function() {
+            mocked.uninstall('heinzel-generator-pg');
+            return uninstallSpy.should.have.been.calledWith(['heinzel-generator-pg']);
+        });
+
+        it('should set global', function() {
+            mocked.uninstall('heinzel-generator-pg', { global: true });
+            return configSpy.should.have.been.calledWith('global', true);
+        });
+
+        it('should call npm uninstall with keywords', function() {
+            mocked.uninstall(['key', 'word']);
+            return uninstallSpy.should.have.been.calledWith(['key', 'word']);
+        });
+    });
+
     describe('#search', function() {
         var searchSpy, mocked;
         beforeEach(function() {

@@ -21,4 +21,5 @@ pub.search = function(packageName){
             q.resolve(data);
         });
     });
+    return q.promise;
 };

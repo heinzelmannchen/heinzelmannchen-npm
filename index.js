@@ -2,11 +2,15 @@
     npm = require('npm'),
     pub = module.exports;
 
-//TODO: install error
-
-pub.install = function(packageName){
+pub.install = function(packageName, options){
     var q = Q.defer();
-    npm.load(npm.config, function (err) {
+
+    options = options || {};
+    
+    npm.load(function (err) {
+        if (options.global){
+            npm.config.set('global', true);
+        }
         npm.commands.install([packageName], function(data){
             q.resolve(data);
         });
@@ -16,7 +20,7 @@ pub.install = function(packageName){
 
 pub.search = function(packageName){
     var q = Q.defer();
-    npm.load(npm.config, function (err) {
+    npm.load(function (err) {
         npm.commands.search([packageName], function(data){
             q.resolve(data);
         });

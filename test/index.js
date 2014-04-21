@@ -4,7 +4,7 @@ var npmUtils = require('../index'),
     sinon = require('sinon'),
     npmMock = {
         commands: {},
-        load: function(config, cb) { cb(); }
+        load: function(cb) { cb(); }
     };
 
 require('mocha-as-promised')();
@@ -16,10 +16,12 @@ describe('NpmUtils', function() {
     });
 
     describe('#install', function() {
-        var installSpy, mocked;
+        var mocked, installSpy, configSpy;
         beforeEach(function() {
             installSpy = sinon.spy();
+            configSpy = sinon.spy();
             npmMock.commands.install = installSpy;
+            npmMock.config =  { set: configSpy };
             mocked = proxyquire('../index', {
                 npm: npmMock
             });
@@ -28,6 +30,11 @@ describe('NpmUtils', function() {
         it('should call npm install', function() {
             mocked.install('heinzel-generator-pg');
             return installSpy.should.have.been.calledWith(['heinzel-generator-pg']);
+        });
+
+        it('should set global', function() {
+            mocked.install('heinzel-generator-pg', { global: true });
+            return configSpy.should.have.been.calledWith('global', true);
         });
     });
 

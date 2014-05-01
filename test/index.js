@@ -7,12 +7,12 @@ var npmUtils = require('../index'),
         load: function(cb) { cb(); }
     };
 
-require('mocha-as-promised')();
-
 describe('NpmUtils', function() {
     it('should offer install, search ', function() {
         npmUtils.should.respondTo('install');
         npmUtils.should.respondTo('search');
+        npmUtils.should.respondTo('uninstall');
+        npmUtils.should.respondTo('update');
     });
 
     describe('#install', function() {
@@ -68,6 +68,39 @@ describe('NpmUtils', function() {
         it('should call npm uninstall with keywords', function() {
             mocked.uninstall(['key', 'word']);
             return uninstallSpy.should.have.been.calledWith(['key', 'word']);
+        });
+    });
+
+    describe('#update', function () {
+        var mocked, updateSpy, configSpy;
+        beforeEach(function () {
+            updateSpy = sinon.spy();
+            configSpy = sinon.spy();
+            npmMock.commands.update = updateSpy;
+            npmMock.config = { set: configSpy };
+            mocked = proxyquire('../index', {
+                npm: npmMock
+            });
+        });
+
+        it('should call npm update', function () {
+            mocked.update('heinzel-generator-pg');
+            return updateSpy.should.have.been.calledWith(['heinzel-generator-pg']);
+        });
+
+        it('should set global', function () {
+            mocked.update('heinzel-generator-pg', { global: true });
+            return configSpy.should.have.been.calledWith('global', true);
+        });
+
+        it('should call npm update with keywords', function () {
+            mocked.update(['key', 'word']);
+            return updateSpy.should.have.been.calledWith(['key', 'word']);
+        });
+
+        it('should call npm update without keywords', function () {
+            mocked.update();
+            return updateSpy.should.have.been.called;
         });
     });
 

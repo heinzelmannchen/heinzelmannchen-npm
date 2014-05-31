@@ -1,6 +1,6 @@
 {
   "name": "heinzelmannchen-npm",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Utilities for npm used in heinzelmannchen",
   "main": "index.js",
   "scripts": {

@@ -21,11 +21,11 @@ function npmCommand(command, keywords, options) {
 
     npm.load(function (err) {
         npm.config.set('global', !!options.global);
-		
-		if(options.silent){
-			npm.config.set('loglevel', 'silent');
-		}
-		
+
+        if(options.silent){
+            setSilent(npm);
+        }
+
         if (keywords) {
             keywords = ensureArray(keywords);
             npm.commands[command](keywords, function (error, data) {
@@ -46,6 +46,16 @@ function npmCommand(command, keywords, options) {
         }
     });
     return q.promise;
+}
+
+function setSilent(npm) {
+    npm.config.set('loglevel', 'silent');
+    disableSpinner();
+}
+
+function disableSpinner() {
+    npm.spinner.start = function () { };
+    npm.spinner.stop = function () { };
 }
 
 function ensureArray(objOrArray) {

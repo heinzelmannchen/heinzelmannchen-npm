@@ -21,6 +21,11 @@ function npmCommand(command, keywords, options) {
 
     npm.load(function (err) {
         npm.config.set('global', !!options.global);
+		
+		if(options.silent){
+			npm.config.set('loglevel', 'silent');
+		}
+		
         if (keywords) {
             keywords = ensureArray(keywords);
             npm.commands[command](keywords, function (error, data) {
